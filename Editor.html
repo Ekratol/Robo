@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoboRally – Editor arény</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:15px;font-family:Arial,sans-serif;background:#eef1f6;color:#202b3c}
+header{margin-bottom:15px}
+header h1{margin:0;font-size:26px}
+header p{color:#647087}
+.layout{display:grid;grid-template-columns:290px 1fr;gap:15px;align-items:start}
+.panel,.boardwrap{background:#fff;border:1px solid #d5dbe5;border-radius:10px;padding:15px}
+h2{font-size:17px;margin:0 0 10px}
+label{display:block;margin:10px 0;font-size:14px}
+input,select,button{padding:8px;border:1px solid #bbc5d4;border-radius:6px;font-size:14px;max-width:100%}
+input[type=number]{width:90px}
+button{cursor:pointer;background:#f5f7fb;margin:3px}
+button:hover{background:#dce8ff}
+#palette{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+#palette button{text-align:left;font-size:13px;margin:0;min-height:39px}
+#palette button.active{background:#cbdcff;border-color:#4269b5}
+hr{border:0;border-top:1px solid #ddd;margin:15px 0}
+.boardwrap{overflow:auto}
+#board{display:grid;gap:2px;width:max-content;margin:15px auto;padding:3px;background:#aab4c3}
+.cell{width:46px;height:46px;display:flex;align-items:center;justify-content:center;position:relative;border:1px solid #aab4c3;background:#fff;cursor:pointer;font-size:11px;font-weight:bold;text-align:center;overflow:hidden}
+.cell:hover{outline:2px solid #3975df;z-index:2}
+.floor{background:#fff}
+.wall{
+ background:repeating-linear-gradient(0deg,transparent 0 14px,#6f3927 14px 16px),
+ repeating-linear-gradient(90deg,#b96843 0 21px,#713b2b 21px 23px);
+ background-color:#a95636;border:1px solid #713b2b
+}
+.pit{background:#000;border:2px solid #333;box-shadow:inset 0 0 0 4px #171717}
+.belt{background:#bcebd0;color:#145c37}
+.belt svg,.curve svg{width:42px;height:42px;display:block;overflow:visible}
+.curve{background:#a5dfbf;color:#145c37}
+.rotator{background:#ddceff;color:#58349b}
+.rotator .symbol{width:35px;height:35px;border:3px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:27px;line-height:1}
+.charger{background:#ffedb5;color:#725000}
+.charger .symbol,.weapon .symbol{font-size:28px}
+.weapon{
+ background:#e5b5ff;
+ color:#35104f;
+ border:2px solid #70258a;
+}
+.weapon .symbol{
+ font-size:36px;
+ font-weight:bold;
+ filter:contrast(1.5);
+ text-shadow:1px 2px 1px #ffffff;
+}
+.start{background:#c4e0ff;color:#174e88}
+.start .symbol{font-size:28px}
+.checkpoint{background:#c4f0ff;color:#07566b;font-size:25px}
+.laser{background:#fff0f0;color:#a00000}
+.laser .beam{position:absolute;background:#e00000;box-shadow:0 0 4px #ff0000;border-radius:3px}
+.laser.horizontal .beam{height:5px;left:8px;right:8px;top:20px}
+.laser.vertical .beam{width:5px;top:8px;bottom:8px;left:20px}
+.laser .emitter,.laser .end{position:absolute;width:10px;height:10px;border:2px solid #710000;background:#ff7777;border-radius:50%;z-index:1}
+.laser.horizontal .emitter{left:2px;top:17px}
+.laser.horizontal .end{right:2px;top:17px}
+.laser.vertical .emitter{top:2px;left:17px}
+.laser.vertical .end{bottom:2px;left:17px}
+.laser .emitter:after{content:"";position:absolute;inset:2px;background:#710000;border-radius:50%}
+#dimensions,#status{color:#58647a;font-size:13px;margin-top:10px}
+.hint{font-size:12px;color:#647087;line-height:1.45}
+.settings-group{padding:8px;background:#f7f8fb;border-radius:7px;margin:8px 0}
+#weaponInfo{margin-top:12px;padding:10px;background:#f5e9ff;border-radius:7px;font-size:12px;line-height:1.5}
+@media(max-width:750px){
+ .layout{grid-template-columns:1fr}
+ .cell{width:36px;height:36px}
+ .laser.horizontal .beam{top:15px}
+ .laser.vertical .beam{left:15px}
+ .laser.horizontal .emitter,.laser.horizontal .end{top:12px}
+ .laser.vertical .emitter,.laser.vertical .end{left:12px}
+ .belt svg,.curve svg{width:33px;height:33px}
+ .rotator .symbol{width:29px;height:29px;font-size:22px}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>RoboRally – Editor herní arény</h1>
+<p>Editor map pro online hru RoboRally</p>
+</header>
+
+<main class="layout">
+<aside class="panel">
+
+<h2>Velikost arény</h2>
+<label>Šířka: <input type="number" id="w" min="5" max="30" value="12"></label>
+<label>Výška: <input type="number" id="h" min="5" max="30" value="10"></label>
+<button id="resize">Použít rozměry</button>
+
+<hr>
+<h2>Prvky mapy</h2>
+<div id="palette">
+<button data-type="floor">Volné pole</button>
+<button data-type="wall">🧱 Zeď</button>
+<button data-type="pit">Díra</button>
+<button data-type="laser">Laser</button>
+<button data-type="belt">Přímý pás</button>
+<button data-type="curve">Zatáčka pásu</button>
+<button data-type="rotator">Otočná plošina</button>
+<button data-type="charger">Nabíjení</button>
+<button data-type="weapon">Bonus / nářadí</button>
+<button data-type="start">Start robota</button>
+<button data-type="checkpoint">Checkpoint</button>
+</div>
+
+<hr>
+<h2>Nastavení prvku</h2>
+
+<label>Směr:
+<select id="direction">
+<option value="N">Nahoru</option>
+<option value="E">Vpravo</option>
+<option value="S">Dolů</option>
+<option value="W">Vlevo</option>
+</select>
+</label>
+
+<label>Otočení zatáčky:
+<select id="curveTurn">
+<option value="R">Doprava</option>
+<option value="L">Doleva</option>
+</select>
+</label>
+
+<label>Směr otočné plošiny:
+<select id="rotatorTurn">
+<option value="R">Vpravo ↻</option>
+<option value="L">Vlevo ↺</option>
+</select>
+</label>
+
+<label>Číslo checkpointu:
+<input type="number" id="number" value="1" min="1" max="99">
+</label>
+
+<label>Bonusová zbraň:
+<select id="weapon">
+<option value="double-laser">Dvojitý laser</option>
+<option value="reverse-laser">Zpětný laser</option>
+<option value="push-laser">Posunovací laser</option>
+<option value="turn-laser">Otočný laser</option>
+</select>
+</label>
+
+<p class="hint">
+U zatáčky vyber směr příjezdu a zda pás zatáčí doleva, nebo doprava.
+U laseru šipka určuje směr paprsku: značka na začátku je vysílač,
+na konci zakončení paprsku.
+</p>
+
+<hr>
+<button id="clear">Vymazat mapu</button>
+<h2>Ukládání mapy</h2>
+<button id="save">Uložit mapu</button>
+<button id="load">Načíst mapu</button>
+<input type="file" id="file" accept=".json" hidden>
+<button id="check" style="display:block;margin-top:10px">Zkontrolovat mapu</button>
+
+<div id="weaponInfo">
+<strong>Bonusové zbraně:</strong><br>
+⚡ Dvojitý laser – dva paprsky.<br>
+↶ Zpětný laser – opačný směr.<br>
+⇢ Posunovací laser – posune soupeře o jedno pole.<br>
+↻ Otočný laser – otočí soupeře o 90°.<br><br>
+Bonus zaniká při pádu do díry, vybití robota, dosažení checkpointu
+nebo získání dalšího bonusu.
+</div>
+
+</aside>
+
+<section class="boardwrap">
+<h2>Hrací plocha</h2>
+<div id="dimensions">12 × 10</div>
+<div id="board"></div>
+<p id="status">Editor připraven.</p>
+</section>
+</main>
+<script>
+const board=document.getElementById("board");
+const statusEl=document.getElementById("status");
+const widthInput=document.getElementById("w");
+const heightInput=document.getElementById("h");
+
+let width=12;
+let height=10;
+let selected="floor";
+let cells=[];
+
+const directions=["N","E","S","W"];
+
+function emptyCell(){
+ return {
+  type:"floor",
+  dir:"N",
+  turn:"R",
+  number:1,
+  weapon:"double-laser"
+ };
+}
+
+function rotateDirection(dir){
+ return {N:0,E:90,S:180,W:270}[dir]||0;
+}
+
+function arrowStraight(dir){
+ return `
+ <svg viewBox="0 0 42 42" aria-hidden="true">
+  <g transform="rotate(${rotateDirection(dir)} 21 21)"
+     fill="none" stroke="currentColor"
+     stroke-width="8" stroke-linecap="round"
+     stroke-linejoin="round">
+   <path d="M21 39 V7"/>
+   <path d="M7 20 L21 6 L35 20"/>
+  </g>
+ </svg>`;
+}
+
+function arrowCurve(dir,turn){
+ let path;
+ let head;
+
+ if(turn==="R"){
+  path="M21 40 C21 29 29 21 40 21";
+  head="M28 9 L40 21 L28 33";
+ }else{
+  path="M21 40 C21 29 13 21 2 21";
+  head="M14 9 L2 21 L14 33";
+ }
+
+ return `
+ <svg viewBox="0 0 42 42" aria-hidden="true">
+  <g transform="rotate(${rotateDirection(dir)} 21 21)"
+     fill="none"
+     stroke="currentColor"
+     stroke-width="7"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+   <path d="${path}"/>
+   <path d="${head}"/>
+  </g>
+ </svg>`;
+}
+
+function cellContent(c){
+ switch(c.type){
+
+  case "floor":
+   return "";
+
+  case "wall":
+   return "";
+
+  case "pit":
+   return "";
+
+  case "belt":
+   return arrowStraight(c.dir);
+
+  case "curve":
+   return arrowCurve(c.dir,c.turn);
+
+  case "rotator":
+   return `<div class="symbol">${c.turn==="R"?"↻":"↺"}</div>`;
+
+  case "charger":
+   return `<div class="symbol">⚡</div>`;
+
+  case "weapon":
+   return `<div class="symbol" title="${weaponName(c.weapon)}">🔧</div>`;
+
+  case "start":
+   return `<div class="symbol">↑</div>`;
+
+  case "checkpoint":
+   return String(c.number);
+
+  case "laser":
+   return `
+    <div class="beam"></div>
+    <div class="emitter"></div>
+    <div class="end"></div>`;
+
+  default:
+   return "";
+ }
+}
+
+function weaponName(type){
+ const names={
+  "double-laser":"Dvojitý laser",
+  "reverse-laser":"Zpětný laser",
+  "push-laser":"Posunovací laser",
+  "turn-laser":"Otočný laser"
+ };
+ return names[type]||"Bonusová zbraň";
+}
+
+function render(){
+ board.innerHTML="";
+ board.style.gridTemplateColumns=`repeat(${width},46px)`;
+
+ cells.forEach((c,index)=>{
+  const el=document.createElement("div");
+  el.className="cell "+c.type;
+
+  if(c.type==="laser"){
+   el.classList.add(
+    c.dir==="N"||c.dir==="S"?"vertical":"horizontal"
+   );
+  }
+
+  el.innerHTML=cellContent(c);
+
+  if(c.type==="start"){
+   el.title="Start robota";
+   el.innerHTML=`<div class="symbol">${{
+    N:"↑",E:"→",S:"↓",W:"←"
+   }[c.dir]}</div>`;
+  }
+
+  if(c.type==="belt"||c.type==="curve"){
+   el.title=c.type==="belt"
+    ?"Přímý pás"
+    :"Zatáčka pásu";
+  }
+
+  if(c.type==="laser"){
+   el.title="Laser – směr "+c.dir;
+  }
+
+  el.addEventListener("click",()=>{
+   placeCell(index);
+  });
+
+  el.addEventListener("contextmenu",e=>{
+   e.preventDefault();
+   cells[index]=emptyCell();
+   render();
+  });
+
+  board.appendChild(el);
+ });
+
+ document.getElementById("dimensions").textContent=
+  width+" × "+height;
+}
+
+function placeCell(index){
+ const old=cells[index];
+ const dir=document.getElementById("direction").value;
+
+ let turn=document.getElementById("curveTurn").value;
+
+ if(selected==="rotator"){
+  turn=document.getElementById("rotatorTurn").value;
+ }
+
+ cells[index]={
+  type:selected,
+  dir:dir,
+  turn:turn,
+  number:Math.max(1,Number(
+   document.getElementById("number").value
+  )||1),
+  weapon:document.getElementById("weapon").value
+ };
+
+ if(selected==="floor"){
+  cells[index]=emptyCell();
+ }
+
+ render();
+ statusEl.textContent="Umístěn prvek: "+selected;
+}
+
+function resizeBoard(){
+ const newW=Math.max(5,Math.min(30,
+  Number(widthInput.value)||12));
+ const newH=Math.max(5,Math.min(30,
+  Number(heightInput.value)||10));
+
+ const oldCells=cells;
+ const oldW=width;
+ const oldH=height;
+
+ width=newW;
+ height=newH;
+ cells=Array.from(
+  {length:width*height},
+  ()=>emptyCell()
+ );
+
+ for(let y=0;y<Math.min(oldH,height);y++){
+  for(let x=0;x<Math.min(oldW,width);x++){
+   cells[y*width+x]=oldCells[y*oldW+x];
+  }
+ }
+
+ render();
+ statusEl.textContent="Rozměry arény změněny.";
+}
+
+function clearBoard(){
+ if(!confirm("Opravdu chceš vymazat celou mapu?"))return;
+ cells=Array.from(
+  {length:width*height},
+  ()=>emptyCell()
+ );
+ render();
+ statusEl.textContent="Mapa byla vymazána.";
+}
+
+document.getElementById("resize")
+ .addEventListener("click",resizeBoard);
+
+document.getElementById("clear")
+ .addEventListener("click",clearBoard);
+
+document.querySelectorAll("#palette button")
+ .forEach(button=>{
+  button.addEventListener("click",()=>{
+   selected=button.dataset.type;
+   document.querySelectorAll("#palette button")
+    .forEach(b=>b.classList.remove("active"));
+   button.classList.add("active");
+   statusEl.textContent=
+    "Vybrán prvek: "+button.textContent;
+  });
+ });
+function saveMap(){
+ const data={
+  version:2,
+  width:width,
+  height:height,
+  cells:cells
+ };
+
+ const blob=new Blob(
+  [JSON.stringify(data,null,2)],
+  {type:"application/json"}
+ );
+
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="roborally-mapa.json";
+ a.click();
+ URL.revokeObjectURL(url);
+
+ statusEl.textContent="Mapa byla uložena.";
+}
+
+function loadMap(){
+ document.getElementById("file").click();
+}
+
+document.getElementById("file")
+ .addEventListener("change",async e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+
+  try{
+   const data=JSON.parse(await file.text());
+
+   if(!data.width||!data.height||!Array.isArray(data.cells)){
+    throw new Error("Neplatný soubor mapy.");
+   }
+
+   width=Math.max(5,Math.min(30,Number(data.width)));
+   height=Math.max(5,Math.min(30,Number(data.height)));
+
+   widthInput.value=width;
+   heightInput.value=height;
+
+   cells=Array.from(
+    {length:width*height},
+    (_,i)=>{
+     const c=data.cells[i]||emptyCell();
+     return {
+      type:c.type||"floor",
+      dir:directions.includes(c.dir)?c.dir:"N",
+      turn:c.turn==="L"?"L":"R",
+      number:Math.max(1,Number(c.number)||1),
+      weapon:c.weapon||"double-laser"
+     };
+    }
+   );
+
+   render();
+   statusEl.textContent="Mapa byla načtena.";
+  }catch(error){
+   alert("Mapu se nepodařilo načíst: "+error.message);
+  }
+
+  e.target.value="";
+ });
+
+function checkMap(){
+ const counts={};
+
+ cells.forEach(c=>{
+  counts[c.type]=(counts[c.type]||0)+1;
+ });
+
+ const starts=counts.start||0;
+ const checkpoints=counts.checkpoint||0;
+ const bonuses=counts.weapon||0;
+ const lasers=counts.laser||0;
+
+ let message=
+  "Kontrola mapy:\n"+
+  "Startovní pole: "+starts+"\n"+
+  "Checkpointy: "+checkpoints+"\n"+
+  "Bonusová pole: "+bonuses+"\n"+
+  "Laserová pole: "+lasers+"\n";
+
+ if(starts===0){
+  message+="\nVAROVÁNÍ: Mapa nemá startovní pole.";
+ }else{
+  message+="\nStartovní pole jsou připravena.";
+ }
+
+ if(checkpoints===0){
+  message+="\nVAROVÁNÍ: Mapa nemá žádný checkpoint.";
+ }
+
+ alert(message);
+ statusEl.textContent="Kontrola mapy dokončena.";
+}
+
+document.getElementById("save")
+ .addEventListener("click",saveMap);
+
+document.getElementById("load")
+ .addEventListener("click",loadMap);
+
+document.getElementById("check")
+ .addEventListener("click",checkMap);
+
+cells=Array.from(
+ {length:width*height},
+ ()=>emptyCell()
+);
+
+document.querySelector('#palette button[data-type="floor"]')
+ .classList.add("active");
+
+render();
+</script>
+</body>
+</html>

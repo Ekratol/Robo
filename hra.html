@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoboRally – Offline hra</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;padding:16px;
+ background:#e9edf4;color:#202b3c;
+ font-family:Arial,sans-serif
+}
+h1{margin:0 0 6px;font-size:27px}
+h2{font-size:19px;margin:0 0 12px}
+h3{font-size:16px;margin:12px 0 7px}
+p{line-height:1.4}
+button,input,select{
+ padding:9px;border:1px solid #aeb9ca;
+ border-radius:6px;font-size:14px
+}
+button{cursor:pointer;background:#edf2fa}
+button:hover{background:#d5e4ff}
+button:disabled{opacity:.45;cursor:not-allowed}
+.panel{
+ background:white;border:1px solid #d2d9e4;
+ border-radius:10px;padding:15px;margin-bottom:14px
+}
+.setup{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:14px
+}
+.players{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:8px
+}
+.player-setting{
+ display:grid;grid-template-columns:1fr 95px;
+ gap:7px;align-items:center;
+ background:#f5f7fa;padding:8px;border-radius:7px
+}
+.player-setting input[type=color]{
+ width:100%;height:38px;padding:2px
+}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.primary{
+ background:#285da8;color:white;border:0;
+ font-weight:bold;padding:11px 17px
+}
+.primary:hover{background:#194782}
+#gameArea{display:none}
+.game-layout{
+ display:grid;grid-template-columns:minmax(0,1fr) 300px;
+ gap:14px;align-items:start
+}
+.board-panel{overflow:auto}
+#board{
+ display:grid;gap:2px;width:max-content;
+ margin:10px auto;padding:4px;background:#9da9b9
+}
+.cell{
+ width:48px;height:48px;position:relative;
+ display:flex;align-items:center;justify-content:center;
+ background:#fff;border:1px solid #aab4c2;
+ overflow:hidden
+}
+.floor{background:#fff}
+.wall{
+ background:
+ repeating-linear-gradient(0deg,transparent 0 14px,#713b2b 14px 16px),
+ repeating-linear-gradient(90deg,#b96843 0 21px,#713b2b 21px 23px);
+ background-color:#a95636
+}
+.pit{background:#000;border:2px solid #333}
+.belt,.curve{background:#bcebd0;color:#145c37}
+.belt svg,.curve svg{width:43px;height:43px}
+.rotator{background:#ddceff;color:#58349b;font-size:31px}
+.charger{background:#ffedb5;color:#725000;font-size:30px}
+.weapon{background:#e5b5ff;color:#35104f;font-size:30px}
+.checkpoint{background:#c4f0ff;color:#07566b;font-size:25px;font-weight:bold}
+.laser{background:#fff0f0}
+.laser .beam{
+ position:absolute;background:#e00000;
+ box-shadow:0 0 4px red;border-radius:3px
+}
+.laser.horizontal .beam{height:5px;left:5px;right:5px;top:21px}
+.laser.vertical .beam{width:5px;top:5px;bottom:5px;left:21px}
+.start{background:#c4e0ff}
+.robot{
+ position:absolute;width:33px;height:33px;
+ border:3px solid white;border-radius:9px;
+ box-shadow:0 1px 5px #333;
+ display:flex;align-items:center;justify-content:center;
+ color:white;font-weight:bold;font-size:15px;
+ z-index:5;text-shadow:0 1px 2px #333
+}
+.robot .facing{position:absolute;top:-12px;color:#172033;
+ font-size:15px;text-shadow:0 0 2px white}
+#playersStatus{display:grid;gap:8px}
+.player-card{
+ border:2px solid #d8dee8;border-radius:8px;
+ padding:9px;background:#fff
+}
+.player-card.active{border-color:#2868c4;background:#edf4ff}
+.player-head{display:flex;align-items:center;gap:8px}
+.player-dot{width:18px;height:18px;border-radius:5px}
+.player-name{font-weight:bold;flex:1}
+.player-small{font-size:12px;color:#536176;margin-top:5px}
+.player-buttons{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.player-buttons button{font-size:12px;padding:6px}
+#message{
+ padding:10px;background:#edf4ff;
+ border-radius:7px;margin-top:10px;min-height:38px
+}
+#roundInfo{font-size:18px;font-weight:bold}
+.hint{font-size:12px;color:#657187;line-height:1.5}
+@media(max-width:850px){
+ .setup{grid-template-columns:1fr}
+ .game-layout{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+ body{padding:8px}
+ .players{grid-template-columns:1fr}
+ .cell{width:38px;height:38px}
+ .robot{width:28px;height:28px}
+}
+</style>
+</head>
+<body>
+
+<header class="panel">
+ <h1>🤖 RoboRally – Offline</h1>
+ <p>Hra pro 2 až 6 hráčů na jednom počítači.</p>
+</header>
+
+<section id="setupArea">
+ <div class="setup">
+  <div class="panel">
+   <h2>1. Herní mapa</h2>
+   <p>Vyber mapu uloženou z našeho editoru RoboRally.</p>
+   <input type="file" id="mapFile" accept=".json,application/json">
+   <div id="mapInfo" class="hint">Mapa zatím není načtena.</div>
+  </div>
+
+  <div class="panel">
+   <h2>2. Počet hráčů</h2>
+   <select id="playerCount">
+    <option value="2">2 hráči</option>
+    <option value="3">3 hráči</option>
+    <option value="4">4 hráči</option>
+    <option value="5">5 hráčů</option>
+    <option value="6" selected>6 hráčů</option>
+   </select>
+   <p class="hint">Každý hráč bude mít vlastního robota.</p>
+  </div>
+ </div>
+
+ <div class="panel">
+  <h2>3. Jména a barvy robotů</h2>
+  <div id="playerSettings" class="players"></div>
+ </div>
+
+ <div class="panel">
+  <h2>4. Zahájení hry</h2>
+  <p class="hint">
+   Na mapě musí být alespoň tolik startovacích polí,
+   kolik je hráčů. Pokud jich bude méně, hra nepůjde spustit.
+  </p>
+  <button class="primary" id="startGame">Spustit hru</button>
+  <div id="setupMessage"></div>
+ </div>
+</section>
+
+<section id="gameArea">
+ <div class="panel">
+  <div id="roundInfo">1. KOLO</div>
+  <div id="turnInfo">Na řadě je první hráč.</div>
+  <div id="message">Hra připravena.</div>
+ </div>
+
+ <div class="game-layout">
+  <div class="panel board-panel">
+   <h2>Herní mapa</h2>
+   <div id="board"></div>
+  </div>
+
+  <aside>
+   <div class="panel">
+    <h2>Hráči a roboti</h2>
+    <div id="playersStatus"></div>
+   </div>
+   <div class="panel">
+    <h2>Ovládání kola</h2>
+    <div id="activePlayerInfo">Připraveno.</div>
+    <div class="actions">
+     <button id="nextPlayer">Další hráč</button>
+     <button id="nextRound">Další kolo</button>
+    </div>
+   </div>
+  </aside>
+ </div>
+</section>
+
+<script>
+const mapFile=document.getElementById("mapFile");
+const mapInfo=document.getElementById("mapInfo");
+const setupMessage=document.getElementById("setupMessage");
+const playerSettings=document.getElementById("playerSettings");
+
+let mapData=null;
+let mapCells=[];
+let mapWidth=0;
+let mapHeight=0;
+
+let players=[];
+let currentPlayer=0;
+let roundStart = 0;
+let round=1;
+let gameStarted=false;
+
+const defaultColors=[
+ "#e53935","#1976d2","#43a047",
+ "#f9a825","#8e24aa","#00acc1"
+];
+
+const arrowSymbols={
+ N:"↑",E:"→",S:"↓",W:"←"
+};
+
+function makePlayerSettings(){
+ const count=Number(
+  document.getElementById("playerCount").value
+ );
+
+ playerSettings.innerHTML="";
+
+ for(let i=0;i<count;i++){
+  const item=document.createElement("div");
+  item.className="player-setting";
+
+  item.innerHTML=`
+   <input type="text" id="playerName${i}"
+    value="Hráč ${i+1}" maxlength="18"
+    aria-label="Jméno hráče ${i+1}">
+   <input type="color" id="playerColor${i}"
+    value="${defaultColors[i]}"
+    aria-label="Barva robota ${i+1}">
+  `;
+
+  playerSettings.appendChild(item);
+ }
+}
+
+document.getElementById("playerCount")
+ .addEventListener("change",makePlayerSettings);
+
+makePlayerSettings();
+
+mapFile.addEventListener("change",async e=>{
+ const file=e.target.files[0];
+ if(!file)return;
+
+ try{
+  const data=JSON.parse(await file.text());
+
+  if(!data.width||!data.height||
+     !Array.isArray(data.cells)){
+   throw new Error("Soubor nemá správný formát mapy.");
+  }
+
+  mapData=data;
+  mapWidth=Number(data.width);
+  mapHeight=Number(data.height);
+
+  mapCells=Array.from(
+   {length:mapWidth*mapHeight},
+   (_,i)=>data.cells[i]||{type:"floor",dir:"N"}
+  );
+
+  const starts=mapCells.filter(c=>c.type==="start").length;
+
+  mapInfo.innerHTML=
+   `<strong>Mapa načtena:</strong> ${mapWidth} × ${mapHeight}<br>`+
+   `Startovní pole: ${starts}`;
+
+  setupMessage.textContent="";
+ }catch(error){
+  mapData=null;
+  mapCells=[];
+  mapInfo.textContent="Chyba: "+error.message;
+ }
+
+ e.target.value="";
+});
+
+function getStartFields(){
+ const result=[];
+
+ mapCells.forEach((cell,index)=>{
+  if(cell.type==="start"){
+   result.push({
+    x:index%mapWidth,
+    y:Math.floor(index/mapWidth),
+    dir:cell.dir||"N"
+   });
+  }
+ });
+
+ return result;
+}
+
+function createPlayers(){
+ const count=Number(
+  document.getElementById("playerCount").value
+ );
+
+ players=[];
+
+ for(let i=0;i<count;i++){
+  const name=
+   document.getElementById("playerName"+i).value.trim()
+   ||"Hráč "+(i+1);
+
+  const color=
+   document.getElementById("playerColor"+i).value;
+
+  players.push({
+   id:i,
+   name:name,
+   color:color,
+   x:0,
+   y:0,
+   dir:"N",
+   cards:10,
+   disabled:false,
+   program:[],
+   damage:0
+  });
+ }
+}
+
+document.getElementById("startGame")
+ .addEventListener("click",()=>{
+  if(!mapData){
+   setupMessage.textContent="Nejdříve načti mapu.";
+   return;
+  }
+
+  const count=Number(
+   document.getElementById("playerCount").value
+  );
+
+  const starts=getStartFields();
+
+  if(starts.length<count){
+   setupMessage.textContent=
+    `Nelze spustit hru. Máš ${starts.length} startovních polí, `+
+    `ale potřebuješ alespoň ${count}.`;
+   return;
+  }
+
+  createPlayers();
+
+  players.forEach((player,i)=>{
+   player.x=starts[i].x;
+   player.y=starts[i].y;
+   player.dir=starts[i].dir;
+  });
+
+  currentPlayer=0;
+  round=1;
+  roundStart = 0;
+  gameStarted=true;
+
+  document.getElementById("setupArea").style.display="none";
+  document.getElementById("gameArea").style.display="block";
+
+  renderBoard();
+  renderPlayers();
+  updateTurnInfo();
+
+  showMessage("Hra byla zahájena. Roboti stojí na startovních polích.");
+ });
+</script>
+
+<script>
+function renderBoard() {
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+  board.style.display = "grid";
+  board.style.gridTemplateColumns = `repeat(${mapWidth}, 48px)`;
+
+  mapCells.forEach((cell, index) => {
+    const x = index % mapWidth;
+    const y = Math.floor(index / mapWidth);
+
+    const tile = document.createElement("div");
+    const type = cell.type || "floor";
+    tile.className = "cell " + type;
+
+    // Zobrazení jednotlivých polí mapy
+    if (type === "wall") {
+      tile.textContent = "🧱";
+    } else if (type === "pit") {
+      tile.textContent = "⬛";
+    } else if (type === "belt") {
+      tile.textContent = arrowSymbols[cell.dir] || "↑";
+    } else if (type === "curve") {
+      tile.textContent = "↪";
+    } else if (type === "rotator") {
+      tile.textContent = cell.turn === "left" ? "↶" : "↷";
+    } else if (type === "charger") {
+      tile.textContent = "⚡";
+    } else if (type === "weapon") {
+      tile.textContent = "🔧";
+    } else if (type === "checkpoint") {
+      tile.textContent = cell.number || "1";
+    } else if (type === "start") {
+      tile.textContent = arrowSymbols[cell.dir] || "↑";
+    } else if (type === "laser") {
+      tile.textContent = "✹";
+    }
+
+    // Souřadnice pole
+    tile.dataset.x = x;
+    tile.dataset.y = y;
+
+    // Roboti stojící na tomto poli
+    players.forEach(player => {
+      if (player.x === x && player.y === y) {
+        const robot = document.createElement("div");
+        robot.className = "robot";
+        robot.style.backgroundColor = player.color;
+        robot.textContent = player.name.charAt(0).toUpperCase();
+        robot.title = player.name + " – " +
+          (arrowSymbols[player.dir] || "↑");
+        tile.appendChild(robot);
+      }
+    });
+
+    board.appendChild(tile);
+  });
+}
+
+function renderPlayers() {
+  const container = document.getElementById("playersStatus");
+  container.innerHTML = "";
+
+  players.forEach((player, index) => {
+    const card = document.createElement("div");
+    card.className = "player-card";
+
+    if (index === currentPlayer) {
+      card.classList.add("active");
+    }
+
+    const name = document.createElement("h3");
+    name.textContent = player.name;
+    name.style.color = player.color;
+
+    const cards = document.createElement("p");
+    cards.textContent = "Karty: " + player.cards + " / 10";
+
+    const position = document.createElement("p");
+    position.textContent =
+      "Pozice: " + player.x + ", " + player.y;
+
+    const direction = document.createElement("p");
+    direction.textContent =
+      "Směr: " + (arrowSymbols[player.dir] || "↑");
+
+    const status = document.createElement("p");
+
+    if (player.cards <= 2) {
+      status.textContent = "Robot je vybitý – nemůže se pohybovat.";
+    } else {
+      status.textContent = "Robot je připraven.";
+    }
+
+    card.appendChild(name);
+    card.appendChild(cards);
+    card.appendChild(position);
+    card.appendChild(direction);
+    card.appendChild(status);
+
+    container.appendChild(card);
+  });
+}
+
+function updateTurnInfo() {
+  const info = document.getElementById("turnInfo");
+
+  if (info && players.length > 0) {
+    info.textContent =
+      "Kolo " + round + " – na tahu je: " +
+      players[currentPlayer].name;
+  }
+}
+
+function showMessage(message) {
+  const element = document.getElementById("gameMessage");
+
+  if (element) {
+    element.textContent = message;
+  } else {
+    console.log(message);
+  }
+}
+</script>
+
+<script>
+// Zásah robota – odebere jednu nebo více karet
+function damagePlayer(player, amount = 1) {
+  player.cards = Math.max(0, player.cards - amount);
+  player.damage = (player.damage || 0) + amount;
+
+  renderPlayers();
+  renderBoard();
+
+  showMessage(
+    player.name + " dostal zásah a ztratil " +
+    amount + " kartu/karty."
+  );
+}
+
+// Dobíjecí stanice – okamžité doplnění na 10 karet
+function chargePlayer(player) {
+  player.cards = 10;
+
+  renderPlayers();
+  renderBoard();
+
+  showMessage(player.name + " se dobil na 10 karet.");
+}
+
+// Dobrovolné vypnutí robota na jedno kolo
+function shutdownPlayer(player) {
+  if (player.shutdownThisTurn) {
+    showMessage("Tento robot už je pro toto kolo vypnutý.");
+    return;
+  }
+
+  player.shutdownThisTurn = true;
+  player.cards = 10;
+
+  renderPlayers();
+  renderBoard();
+
+  showMessage(
+    player.name +
+    " vypnul robota. Toto kolo zůstává stát a dobíjí se na 10 karet."
+  );
+}
+
+// Přechod na dalšího hráče
+document.getElementById("nextPlayer").addEventListener("click", () => {
+  if (!gameStarted || players.length === 0) return;
+
+  currentPlayer++;
+
+  if (currentPlayer >= players.length) {
+    currentPlayer = 0;
+    round++;
+    
+    // Po skončení kola se posune začínající hráč
+    roundStart = (roundStart + 1) % players.length;
+    currentPlayer = roundStart;
+
+    // Vypnutí platilo pouze na jedno kolo
+    players.forEach(player => {
+      player.shutdownThisTurn = false;
+    });
+
+    showMessage("Začíná nové kolo.");
+  }
+
+  renderPlayers();
+  updateTurnInfo();
+});
+
+// Přechod na další kolo
+document.getElementById("nextRound").addEventListener("click", () => {
+  if (!gameStarted || players.length === 0) return;
+
+  round++;
+  roundStart = (roundStart + 1) % players.length;
+  currentPlayer = roundStart;
+
+  players.forEach(player => {
+    player.shutdownThisTurn = false;
+  });
+
+  renderPlayers();
+  updateTurnInfo();
+  showMessage("Začíná kolo " + round + ".");
+});
+</script>
+</body>
+</html>
+
