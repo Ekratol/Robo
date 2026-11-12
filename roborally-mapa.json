@@ -1,0 +1,847 @@
+{
+  "version": 2,
+  "width": 12,
+  "height": 10,
+  "cells": [
+    {
+      "type": "charger",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "start",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "start",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "pit",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "charger",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "weapon",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "weapon",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "push-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "pit",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "curve",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "E",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "E",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "E",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "E",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "E",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "E",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "curve",
+      "dir": "E",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "checkpoint",
+      "dir": "W",
+      "turn": "R",
+      "number": 2,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "E",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "E",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "push-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "push-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "push-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "push-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "pit",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "rotator",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "start",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "start",
+      "dir": "E",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "rotator",
+      "dir": "S",
+      "turn": "L",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "checkpoint",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "charger",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "push-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "push-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "push-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "push-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "checkpoint",
+      "dir": "W",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "curve",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "belt",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "curve",
+      "dir": "S",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "E",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "laser",
+      "dir": "E",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "weapon",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "weapon",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "reverse-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "pit",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "charger",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "pit",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "start",
+      "dir": "N",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "start",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "wall",
+      "dir": "S",
+      "turn": "R",
+      "number": 3,
+      "weapon": "turn-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "floor",
+      "dir": "N",
+      "turn": "R",
+      "number": 1,
+      "weapon": "double-laser"
+    },
+    {
+      "type": "charger",
+      "dir": "W",
+      "turn": "R",
+      "number": 1,
+      "weapon": "turn-laser"
+    }
+  ]
+}
